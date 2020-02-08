@@ -12,6 +12,7 @@ import logging
 import os
 from datetime import timedelta
 from typing import Tuple
+from pathlib import Path
 
 import requests
 from PIL import Image, ImageDraw
@@ -20,7 +21,6 @@ import deepstack.core as ds
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
 import voluptuous as vol
-from homeassistant.util.pil import draw_box
 from homeassistant.components.image_processing import (
     ATTR_CONFIDENCE,
     CONF_ENTITY_ID,
@@ -29,6 +29,7 @@ from homeassistant.components.image_processing import (
     DOMAIN,
     PLATFORM_SCHEMA,
     ImageProcessingEntity,
+    draw_box
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -213,16 +214,21 @@ class ObjectClassifyEntity(ImageProcessingEntity):
                     color=RED,
                 )
 
-        latest_save_path = directory + "{}_latest_{}.jpg".format(self._name, target)
+        
+        latest_save_path = directory + "{}_latest_{}.jpg".format(
+            self._name, target)
+
         img.save(latest_save_path)
 
         if self._save_timestamped_file:
-            timestamp_save_path = directory + "{}_{}_{}.jpg".format(
-                self._name, target, self._last_detection
-            )
+            folder_path = os.path.join(directory + self._name, "")
+            os.makedirs(folder_path, exist_ok=True)
+
+            timestamp_save_path =  folder_path + "{}_{}_{}.jpg".format(
+                self._name, target, self._last_detection)
 
             out_file = open(timestamp_save_path, "wb")
-            img.save(out_file, format="JPEG")
+            img.save(out_file, format='JPEG')
             out_file.flush()
             os.fsync(out_file)
             out_file.close()
