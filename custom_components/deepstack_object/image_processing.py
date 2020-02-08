@@ -191,6 +191,8 @@ class ObjectClassifyEntity(ImageProcessingEntity):
                 self.save_image(
                     image, self._predictions, self._target, self._save_file_folder
                 )
+        else:
+            self._state = 0
 
     def save_image(self, image, predictions, target, directory):
         """Save a timestamped image with bounding boxes around targets."""
