@@ -10,5 +10,5 @@
   "codeowners": [
     "@robmarkcole"
   ],
-  "homeassistant": "0.102.3"
+  "homeassistant": "0.107.7"
 }
