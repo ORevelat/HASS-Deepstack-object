@@ -77,6 +77,7 @@ CONF_ROI_X_MIN = "roi_x_min"
 CONF_ROI_Y_MAX = "roi_y_max"
 CONF_ROI_X_MAX = "roi_x_max"
 CONF_CUSTOM_MODEL = "custom_model"
+CONF_DATETIME_FORMAT = "datetime_format"
 
 DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S"
 DEFAULT_API_KEY = ""
@@ -130,6 +131,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_SAVE_FILE_FOLDER): cv.isdir,
         vol.Optional(CONF_SAVE_TIMESTAMPTED_FILE, default=False): cv.boolean,
         vol.Optional(CONF_SHOW_BOXES, default=True): cv.boolean,
+        vol.Optional(CONF_DATETIME_FORMAT, default=DATETIME_FORMAT): cv.string,
     }
 )
 
@@ -299,6 +301,9 @@ class ObjectClassifyEntity(ImageProcessingEntity):
         self._save_file_folder = save_file_folder
         self._save_timestamped_file = save_timestamped_file
 
+        os.makedirs(os.path.join(self._save_file_folder, self._name), exist_ok=True)
+
+
     def process_image(self, image):
         """Process an image."""
         self._image_width, self._image_height = Image.open(
@@ -448,7 +453,7 @@ class ObjectClassifyEntity(ImageProcessingEntity):
         saved_image_path = latest_save_path
 
         if self._save_timestamped_file:
-            timestamp_save_path = directory / f"{self._name}_{self._last_detection}.jpg"
+            timestamp_save_path = directory / f"{self._name}/{self._name}_{self._last_detection}.jpg"
             img.save(timestamp_save_path)
             _LOGGER.info("Deepstack saved file %s", timestamp_save_path)
             saved_image_path = timestamp_save_path
