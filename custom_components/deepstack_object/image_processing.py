@@ -345,7 +345,7 @@ class ObjectClassifyEntity(ImageProcessingEntity):
 
         self._state = len(self._targets_found)
         if self._state > 0:
-            self._last_detection = dt_util.now().strftime(DATETIME_FORMAT)
+            self._last_detection = dt_util.now().strftime(CONF_DATETIME_FORMAT)
 
         if self._save_file_folder and self._state > 0:
             saved_image_path = self.save_image(
