@@ -77,7 +77,7 @@ CONF_ROI_X_MIN = "roi_x_min"
 CONF_ROI_Y_MAX = "roi_y_max"
 CONF_ROI_X_MAX = "roi_x_max"
 CONF_CUSTOM_MODEL = "custom_model"
-CONF_DATETIME_FORMAT = "datetime_format"
+CONF_DATETIME_FORMAT = "timestamp_format"
 
 DATETIME_FORMAT = "%Y-%m-%d_%H-%M-%S"
 DEFAULT_API_KEY = ""
@@ -228,6 +228,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             show_boxes=config[CONF_SHOW_BOXES],
             save_file_folder=save_file_folder,
             save_timestamped_file=config.get(CONF_SAVE_TIMESTAMPTED_FILE),
+            timestamp_format=config.get(CONF_DATETIME_FORMAT),
             camera_entity=camera.get(CONF_ENTITY_ID),
             name=camera.get(CONF_NAME),
         )
@@ -254,6 +255,7 @@ class ObjectClassifyEntity(ImageProcessingEntity):
         show_boxes,
         save_file_folder,
         save_timestamped_file,
+        timestamp_format,
         camera_entity,
         name=None,
     ):
@@ -300,6 +302,7 @@ class ObjectClassifyEntity(ImageProcessingEntity):
         self._image_height = None
         self._save_file_folder = save_file_folder
         self._save_timestamped_file = save_timestamped_file
+        self._timestamp_format = timestamp_format
 
         os.makedirs(os.path.join(self._save_file_folder, self._name), exist_ok=True)
 
@@ -345,7 +348,7 @@ class ObjectClassifyEntity(ImageProcessingEntity):
 
         self._state = len(self._targets_found)
         if self._state > 0:
-            self._last_detection = dt_util.now().strftime(target[CONF_DATETIME_FORMAT])
+            self._last_detection = dt_util.now().strftime(self._timestamp_format)
 
         if self._save_file_folder and self._state > 0:
             saved_image_path = self.save_image(
