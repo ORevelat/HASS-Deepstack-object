@@ -1,14 +1,13 @@
 {
-  "domain": "deepstack_object",
-  "name": "Deepstack Object Detection",
-  "documentation": "https://github.com/ORevelat/HASS-Deepstack-object",
-  "requirements": [
-    "pillow",
-    "deepstack-python==0.4"
-  ],
-  "dependencies": [],
-  "codeowners": [
-    "@robmarkcole"
-  ],
-  "homeassistant": "0.107.7"
+        "domain": "deepstack_object",
+        "name": "deepstack object custom integration",
+        "documentation": "https://github.com/robmarkcole/HASS-Deepstack-object",
+        "requirements": [
+                "pillow",
+                "deepstack-python==0.8"
+        ],
+        "dependencies": [],
+        "codeowners": [
+                "@robmarkcole"
+        ]
 }
